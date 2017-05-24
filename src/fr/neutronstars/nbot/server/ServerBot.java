@@ -13,11 +13,35 @@ import fr.neutronstars.nbot.logger.NBotLogger;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
 
+/**
+ * 
+ * @author NeutronStars
+ * @since 1.0
+ */
 public final class ServerBot {
 
+	/**
+	 * List of operator of the guild.
+	 * @since 1.0
+	 */
 	private final List<String> operators = new ArrayList<>();
+	
+	/**
+	 * Creator ID of the guild.
+	 * @since 1.0
+	 */
 	private final String administratorId;
+	
+	/**
+	 * Folder of the guild.
+	 * @since 1.0
+	 */
 	private final File folder;
+	
+	/**
+	 * ID of the guild.
+	 * @since 1.0
+	 */
 	private final String id;
 	
 	public ServerBot(Guild guild){
@@ -28,19 +52,36 @@ public final class ServerBot {
 		load();
 	}
 	
+	/**
+	 * Add Operator in the Server.
+	 * @param userID
+	 * @since 1.0
+	 */
 	public void addOperator(String userID){
 		if(!operators.contains(userID)) operators.add(userID);
 	}
 	
+	/**
+	 * Remove Operator in the Server.
+	 * @param userID
+	 * @since 1.0
+	 */
 	public void removeOperator(String userID){
 		if(operators.contains(userID)) operators.remove(userID);
 	}
 	
+	/**
+	 * Check if user has permission.
+	 * @param permission
+	 * @param user
+	 * @return Boolean
+	 * @since 1.0
+	 */
 	public boolean hasPermission(Permission permission, User user){
 		switch(permission){
 			case NONE : return true;
 			case OPERATOR : return administratorId.equalsIgnoreCase(user.getId()) || user.getJDA().getGuildById(id).getMember(user).hasPermission(net.dv8tion.jda.core.Permission.ADMINISTRATOR) || operators.contains(user.getId());
-			case ADMINISTRATOR : return administratorId.equalsIgnoreCase(user.getId());
+			case ADMINISTRATOR : return administratorId.equalsIgnoreCase(user.getId()) || user.getJDA().getGuildById(id).getMember(user).hasPermission(net.dv8tion.jda.core.Permission.ADMINISTRATOR);
 		}
 		return false;
 	}

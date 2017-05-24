@@ -10,6 +10,10 @@ import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.EventListener;
 
+/**
+ * @author NeutronStars
+ * @since 1.0
+ */
 public class BotListener implements EventListener{
 
 	private final CommandMap commandMap;
@@ -29,7 +33,7 @@ public class BotListener implements EventListener{
 		if(message.startsWith(commandMap.getTag())){
 			message = message.replaceFirst(commandMap.getTag(), "");
 			if(commandMap.commandUser(event.getAuthor(), message, event.getMessage()))
-				if(event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().complete();
+				if(event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
 			return;
 		}
 	}

@@ -5,6 +5,10 @@ import java.lang.reflect.Method;
 import fr.neutronstars.nbot.command.Command.Executor;
 import fr.neutronstars.nbot.command.Command.Permission;
 
+/**
+ * @author NeutronStars
+ * @since 1.0
+ */
 public final class SimpleCommand {
 
 	private final String name;

@@ -12,6 +12,11 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 
+/**
+ * Default Command of NBot
+ * @author NeutronStars
+ * @since 1.0
+ */
 public final class DefaultCommand implements CommandManager {
 
 	private final CommandMap commandMap;
@@ -20,6 +25,12 @@ public final class DefaultCommand implements CommandManager {
 		this.commandMap = commandMap;
 	}
 	
+	/**
+	 * Help Command.
+	 * @param user
+	 * @param channel
+	 * @since 1.0
+	 */
 	@Command(name="help",description="Shows the list of commands.")
 	private void help(User user, TextChannel channel){
 		StringBuilder builder = new StringBuilder(user == null ? "\n========================================" : "```").append("\nCommands list :\n\n");
@@ -36,6 +47,22 @@ public final class DefaultCommand implements CommandManager {
 		}
 	}
 	
+	/**
+	 * Stop Command.
+	 * @since 1.0
+	 */
+	@Command(name="stop",type=Executor.CONSOLE,description="Stop the bot.")
+	private void stop(){
+		NBot.getNBot().stop();
+	}
+	
+	/**
+	 * Operator Command.
+	 * @param user
+	 * @param channel
+	 * @param args
+	 * @since 1.0
+	 */
 	@Command(name="operator",permission=Permission.ADMINISTRATOR,description="Add/Remove a operator of the guild.")
 	private void operator(User user, TextChannel channel, String[] args){
 		if(user != null && !channel.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.core.Permission.MESSAGE_WRITE)) return;
@@ -58,11 +85,6 @@ public final class DefaultCommand implements CommandManager {
 			if(user == null) NBotLogger.LOGGER.log("-> operator <add/remove> <ID Guild> <Id User>");
 			else channel.sendMessage(user.getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```").complete();
 		}
-	}
-	
-	@Command(name="stop",type=Executor.CONSOLE,description="Stop the bot.")
-	private void stop(){
-		NBot.getNBot().stop();
 	}
 	
 	private boolean operator(String param, Guild guild, User user){

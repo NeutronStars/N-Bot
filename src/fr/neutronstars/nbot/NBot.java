@@ -22,12 +22,18 @@ import net.dv8tion.jda.core.entities.Guild;
 
 /**
  * @author NeutronStars
+ * @since 1.0 
  */
 
 public final class NBot implements Runnable{
 
 	private static NBot nBot;
 	
+	/**
+	 * Retrieves the instance of the class NBot.
+	 * @return NBot
+	 * @since 1.0
+	 */
 	public static NBot getNBot() {
 		return nBot;
 	}
@@ -49,37 +55,78 @@ public final class NBot implements Runnable{
 		jda.addEventListener(new BotListener(commandMap));
 	}
 	
+	/**
+	 * Retrieves the instance of the class JDA.
+	 * @return JDA
+	 * @since 1.0
+	 */
 	public JDA getJDA() {
 		return jda;
 	}
 	
+	/**
+	 * Retrieves the instance of the class PluginManager.
+	 * @return PluginManager
+	 * @since 1.0
+	 */
 	public PluginManager getPluginManager() {
 		return pluginManager;
 	}
 	
+	/**
+	 * Retrieves a class ServerBot.
+	 * @param guild
+	 * @return ServerBot
+	 * @since 1.0
+	 */
 	public ServerBot getServer(Guild guild){
 		return loadGuild(guild);
 	}
 	
+	/**
+	 * Retrieves the tag of command.
+	 * @return String
+	 * @since 1.0
+	 */
 	public String getCommandTag() {
 		return commandMap.getTag();
 	}
 	
+	/**
+	 * Load a instance of ServerBot.
+	 * @param guild
+	 * @return ServerBot
+	 * @since 1.0
+	 */
 	public ServerBot loadGuild(Guild guild){
 		if(!servers.containsKey(guild.getId())) servers.put(guild.getId(), new ServerBot(guild));
 		return servers.get(guild.getId());
 	}
 	
+	/**
+	 * The nextInt of the class {@link Random}
+	 * @param index
+	 * @return Integer
+	 * @since 1.0
+	 */
 	public int nextInt(int index){
 		return random.nextInt(index);
 	}
 	
+	/**
+	 * Start the application.
+	 * @since 1.0
+	 */
 	public void start(){
 		if(running) return;
 		running = true;
 		thread.start();
 	}
 	
+	/**
+	 * Stop the application.
+	 * @since 1.0
+	 */
 	public void stop(){
 		if(!running) return;
 		running = false;

@@ -11,11 +11,17 @@ import net.dv8tion.jda.core.utils.SimpleLog;
 import net.dv8tion.jda.core.utils.SimpleLog.LogListener;
 
 /**
+ * Console Logger
  * @author NeutronStars
+ * @since 1.0
  */
 
 public final class NBotLogger implements LogListener{
 
+	/**
+	 * Main Logger
+	 * @since 1.0
+	 */
 	public final static NBotLogger LOGGER = newLogger();
 	
 	private static NBotLogger newLogger(){
@@ -30,7 +36,7 @@ public final class NBotLogger implements LogListener{
 	private final BufferedWriter bufferedWriter;
 	
 	private NBotLogger() throws IOException{
-		File folder = new File("log");
+		File folder = new File("logs");
 		if(!folder.exists()) folder.mkdirs();
 		String time = nowFormat();
 		String fileName = time.split("-")[0].replace("/", "-");
@@ -46,10 +52,21 @@ public final class NBotLogger implements LogListener{
 		SimpleLog.addListener(this);
 	}
 	
+	/**
+	 * Log info in the console.
+	 * @param msg
+	 * @since 1.0
+	 */
 	public void log(String msg){
 		log(Level.INFO, msg);
 	}
 	
+	/**
+	 * Log info in the console but with level for indication.
+	 * @param level
+	 * @param msg
+	 * @since 1.0
+	 */
 	public void log(Level level, String msg){
 		log(level, msg, false);
 	}
@@ -67,6 +84,11 @@ public final class NBotLogger implements LogListener{
 		}
 	}
 	
+	/**
+	 * Log a exception in the console.
+	 * @param throwable
+	 * @since 1.0
+	 */
 	public void logThrowable(Throwable throwable){
 		logThrowable(throwable, false);
 	}

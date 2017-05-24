@@ -7,12 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarFile;
 
+import fr.neutronstars.nbot.NBot;
 import fr.neutronstars.nbot.command.CommandManager;
 import fr.neutronstars.nbot.command.CommandMap;
 import fr.neutronstars.nbot.logger.NBotLogger;
 
 /**
  * @author NeutronStars
+ * @since 1.0
  */
 
 public final class PluginManager {
@@ -75,6 +77,14 @@ public final class PluginManager {
 		return plugins.get(name);
 	}
 	
+	/**
+	 * Register a command in the application.
+	 * @param commandManager
+	 * @since 1.0
+	 */
+	public final void registerCommand(CommandManager... commandManager){
+		NBot.getNBot().getPluginManager().registerCommands(commandManager);
+	}
 	public void registerCommands(CommandManager...commandManagers){
 		commandMap.registerCommands(commandManagers);
 	}

@@ -8,7 +8,9 @@ import fr.neutronstars.nbot.logger.NBotLogger;
 import net.dv8tion.jda.core.JDA;
 
 /**
+ * Main class for the plugins.
  * @author NeutronStars
+ * @since 1.0
  */
 
 public abstract class JDAPlugin{
@@ -41,20 +43,43 @@ public abstract class JDAPlugin{
 		this.version = version != null ? version : "1.0";
 	}
 	
+	/**
+	 * Register a command in the application.
+	 * @param commandManager
+	 * @since 1.0
+	 */
 	public final void registerCommand(CommandManager... commandManager){
 		NBot.getNBot().getPluginManager().registerCommands(commandManager);
 	}
 	
+	/**
+	 * Retrieves the instance of the class JDA.
+	 * @return JDA
+	 * @since 1.0
+	 */
 	public final JDA getJDA(){
 		return NBot.getNBot().getJDA();
 	}
 	
+	/**
+	 * Retrieves the instance of the class NBotLogger.
+	 * @return NBotLogger
+	 * @since 1.0
+	 */
 	public final NBotLogger getLogger(){
 		return NBotLogger.LOGGER;
 	}
 	
+	/**
+	 * Call when loading the plugin.
+	 * @since 1.0
+	 */
 	public void onLoad(){}
-		
+	
+	/**
+	 * Call when disabling the plugin.
+	 * @since 1.0
+	 */
 	public void onDisable(){}
 	
 	protected void setPluginClassLoader(JDAClassLoader jdaClassLoader){

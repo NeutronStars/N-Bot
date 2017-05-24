@@ -6,6 +6,7 @@ import java.net.URLClassLoader;
 
 /**
  * @author NeutronStars
+ * @since 1.0
  */
 
 final class JDAClassLoader extends URLClassLoader{
