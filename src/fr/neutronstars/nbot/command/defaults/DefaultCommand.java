@@ -31,6 +31,7 @@ public final class DefaultCommand implements CommandManager {
 	 * @param channel
 	 * @since 1.0
 	 */
+	@SuppressWarnings("deprecation")
 	@Command(name="help",description="Shows the list of commands.")
 	private void help(User user, TextChannel channel){
 		StringBuilder builder = new StringBuilder(user == null ? "\n========================================" : "```").append("\nCommands list :\n\n");
@@ -43,7 +44,7 @@ public final class DefaultCommand implements CommandManager {
 		else{
 			if(!channel.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.core.Permission.MESSAGE_WRITE)) return;
 			if(!user.hasPrivateChannel()) user.openPrivateChannel().complete();
-			user.getPrivateChannel().sendMessage(builder.toString()).complete();
+			user.getPrivateChannel().sendMessage(builder.toString()).queue();
 		}
 	}
 	
@@ -72,7 +73,7 @@ public final class DefaultCommand implements CommandManager {
 			if(user == null) NBotLogger.LOGGER.log("-> operator <add/remove> <ID Guild> <Id User>");
 			else{
 				if(channel == null) return;
-				channel.sendMessage(user.getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```").complete();
+				channel.sendMessage(user.getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```").queue();
 			}
 		}
 		String param = args[0];
@@ -80,10 +81,10 @@ public final class DefaultCommand implements CommandManager {
 		target = NBot.getNBot().getJDA().getUserById(user == null ? args[2] : args[1]);
 		if(operator(param, guild, target)){
 			if(user == null) NBotLogger.LOGGER.log(target.getName()+" "+param+" operator to the guild "+guild.getName()+".");
-			else channel.sendMessage(target.getAsMention()+" "+param+" operator.").complete();
+			else channel.sendMessage(target.getAsMention()+" "+param+" operator.").queue();
 		}else{
 			if(user == null) NBotLogger.LOGGER.log("-> operator <add/remove> <ID Guild> <Id User>");
-			else channel.sendMessage(user.getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```").complete();
+			else channel.sendMessage(user.getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```").queue();
 		}
 	}
 	
