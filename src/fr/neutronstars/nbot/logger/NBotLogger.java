@@ -38,7 +38,7 @@ public final class NBotLogger implements LogListener{
 	private NBotLogger() throws IOException{
 		File folder = new File("logs");
 		if(!folder.exists()) folder.mkdirs();
-		String time = nowFormat();
+		String time = nowTime();
 		String fileName = time.split("-")[0].replace("/", "-");
 		int number = 1;
 		File file = null;
@@ -74,7 +74,7 @@ public final class NBotLogger implements LogListener{
 	private void log(Level level, String msg, boolean jda){
 		if(level == Level.TRACE || level == Level.DEBUG) return;
 		try{
-			String line = String.format(pattern, new Object[]{nowFormat(), level.toString(), msg});
+			String line = String.format(pattern, new Object[]{nowTime(), level.toString(), msg});
 			bufferedWriter.newLine();
 			bufferedWriter.write(line);
 			bufferedWriter.flush();
@@ -101,7 +101,7 @@ public final class NBotLogger implements LogListener{
         log(Level.FATAL, builder.toString(), jda);
 	}
 	
-	private String nowFormat(){
+	private String nowTime(){
 		return simpleDateFormat.format(new Date());
 	}
 
