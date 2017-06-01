@@ -2,8 +2,11 @@ package fr.neutronstars.nbot.command;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fr.neutronstars.nbot.NBot;
@@ -26,6 +29,7 @@ import net.dv8tion.jda.core.entities.User;
  */
 public final class CommandMap {
 
+	private final List<SimpleCommand> simpleCommands = new ArrayList<>();
 	private final Map<String, SimpleCommand> commands = new HashMap<>();
 	private final String tag;
 	
@@ -39,7 +43,7 @@ public final class CommandMap {
 	}
 	
 	public Collection<SimpleCommand> getCommands(){
-		return commands.values();
+		return Collections.unmodifiableCollection(simpleCommands);
 	}
 	
 	public void registerCommands(CommandManager...commandManagers){
@@ -51,15 +55,21 @@ public final class CommandMap {
 			if(method.isAnnotationPresent(Command.class)){
 				Command command = method.getAnnotation(Command.class);
 				method.setAccessible(true);
-				commands.put(command.name(), new SimpleCommand(command.name(), command.type(), command.description(), command.permission(),commandManager,method));
+				SimpleCommand simpleCommand = new SimpleCommand(command.name(), command.type(), command.description(), command.permission(), commandManager, command.alias(), method);
+				simpleCommands.add(simpleCommand);
+				commands.put(command.name(), simpleCommand);
+				if(command.alias().length > 0){
+					for(String alias : command.alias()) commands.put(alias, simpleCommand);
+				}
 			}
 		}
 	}
 	
 	public void commandConsole(String command){
+		NBotLogger.LOGGER.log(command);
 		Object[] object = getCommand(command);
 		if(object[0] == null || ((SimpleCommand)object[0]).getExecutor() == Executor.USER){
-			System.out.println("Command unknow.");
+			NBotLogger.LOGGER.log("Command unknow.");
 			return;
 		}
 		try{
@@ -71,6 +81,8 @@ public final class CommandMap {
 	
 	public boolean commandUser(User user, String command, Message message){
 		Object[] object = getCommand(command);
+		if(message.getTextChannel() != null) NBotLogger.LOGGER.log(user.getName()+" has perform command to guild "+message.getGuild().getName() +" -> "+command);
+		else if(message.getPrivateChannel() != null) NBotLogger.LOGGER.log(user.getName()+" has perform command in private channel : "+command);
 		if(object[0] == null || ((SimpleCommand)object[0]).getExecutor() == Executor.CONSOLE) return false;
 		try{
 			if(message.getTextChannel() != null && !NBot.getNBot().getServer(message.getGuild()).hasPermission(((SimpleCommand)object[0]).getPermission(), user)){
@@ -97,7 +109,7 @@ public final class CommandMap {
 		Object[] objects = new Object[parameters.length];
 		for(int i = 0; i < parameters.length; i++){
 			if(parameters[i].getType() == String[].class) objects[i] = args;
-			else if(parameters[i].getType() == User.class) objects[i] = NBot.getNBot().getJDA().getSelfUser();
+			else if(parameters[i].getType() == User.class) objects[i] = message == null ? null : message.getAuthor();
 			else if(parameters[i].getType() == TextChannel.class) objects[i] = message == null ? null : message.getTextChannel();
 			else if(parameters[i].getType() == PrivateChannel.class) objects[i] = message == null ? null : message.getPrivateChannel();
 			else if(parameters[i].getType() == Guild.class) objects[i] = message == null ? null : message.getGuild();

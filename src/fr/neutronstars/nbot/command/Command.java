@@ -45,6 +45,12 @@ public @interface Command {
 	public Permission permission() default Permission.NONE;
 	
 	/**
+	 * Alias of the Command
+	 * @return String[]
+	 * @since 1.0
+	 */
+	public String[] alias() default {};
+	/**
 	 * Executor type of the Command 
 	 * @author NeutronStars
 	 * @since 1.0
