@@ -36,7 +36,7 @@ public final class ServerBot {
 	 * Folder of the guild.
 	 * @since 1.0
 	 */
-	private final File folder;
+	private final File folder, permission;
 	
 	/**
 	 * ID of the guild.
@@ -49,7 +49,8 @@ public final class ServerBot {
 		id = guild.getId();
 		folder = new File("servers/"+id);
 		if(!folder.exists()) folder.mkdirs();
-		load();
+		permission = new File(folder, "permission.txt");
+		if(permission.exists()) load();
 	}
 	
 	/**
@@ -87,7 +88,7 @@ public final class ServerBot {
 	}
 	
 	private void load(){
-		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(folder, "permission.txt")))){
+		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(permission))){
 			while(bufferedReader.ready()){
 				String id = bufferedReader.readLine();
 				if(id == null || id.length() < 1) continue;
@@ -99,7 +100,7 @@ public final class ServerBot {
 	}
 	
 	public void save(){
-		try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(folder, "permission.txt")))){
+		try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(permission))){
 			for(String id : operators){
 				bufferedWriter.write(id);
 				bufferedWriter.flush();
