@@ -32,7 +32,7 @@ public class BotListener implements EventListener{
 		String message = event.getMessage().getContent();
 		if(message.startsWith(commandMap.getTag())){
 			message = message.replaceFirst(commandMap.getTag(), "");
-			if(commandMap.commandUser(event.getAuthor(), message, event.getMessage()))
+			if(commandMap.onCommand(event.getAuthor(), message, event.getMessage()))
 				if(event.getGuild() != null && event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
 			return;
 		}

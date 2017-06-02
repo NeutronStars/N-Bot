@@ -134,7 +134,7 @@ public final class NBot implements Runnable{
 	
 	public void run() {
 		while (running){
-			if(scanner.hasNextLine()) commandMap.commandConsole(scanner.nextLine());
+			if(scanner.hasNextLine()) commandMap.onCommand(null, scanner.nextLine(), null);
 		}
 		
 		NBotLogger.LOGGER.log("Stopping a bot...\nGuilds saving...");

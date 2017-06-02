@@ -65,27 +65,19 @@ public final class CommandMap {
 		}
 	}
 	
-	public void commandConsole(String command){
-		NBotLogger.LOGGER.log(command);
+	public boolean onCommand(User user, String command, Message message){
 		Object[] object = getCommand(command);
-		if(object[0] == null || ((SimpleCommand)object[0]).getExecutor() == Executor.USER){
-			NBotLogger.LOGGER.log("Command unknow.");
-			return;
+		if(user == null) NBotLogger.LOGGER.log(command);
+		else{
+			if(message.getTextChannel() != null) NBotLogger.LOGGER.log(user.getName()+" has perform command to guild "+message.getGuild().getName() +" -> "+command);
+			else if(message.getPrivateChannel() != null) NBotLogger.LOGGER.log(user.getName()+" has perform command in private channel : "+command);
+		}
+		if(object[0] == null || (user == null && ((SimpleCommand)object[0]).getExecutor() == Executor.USER) || (user != null && ((SimpleCommand)object[0]).getExecutor() == Executor.CONSOLE)){
+			if(user == null) NBotLogger.LOGGER.log("Command unknow.");
+			return false;
 		}
 		try{
-			execute(((SimpleCommand)object[0]), command, (String[])object[1], null);
-		}catch(Exception exception){
-			NBotLogger.LOGGER.log(Level.FATAL, "The method "+((SimpleCommand)object[0]).getMethod().getName()+" is not initialize correctly.");
-		}
-	}
-	
-	public boolean commandUser(User user, String command, Message message){
-		Object[] object = getCommand(command);
-		if(message.getTextChannel() != null) NBotLogger.LOGGER.log(user.getName()+" has perform command to guild "+message.getGuild().getName() +" -> "+command);
-		else if(message.getPrivateChannel() != null) NBotLogger.LOGGER.log(user.getName()+" has perform command in private channel : "+command);
-		if(object[0] == null || ((SimpleCommand)object[0]).getExecutor() == Executor.CONSOLE) return false;
-		try{
-			if(message.getTextChannel() != null && !NBot.getNBot().getServer(message.getGuild()).hasPermission(((SimpleCommand)object[0]).getPermission(), user)){
+			if(user != null && message.getTextChannel() != null && !NBot.getNBot().getServer(message.getGuild()).hasPermission(((SimpleCommand)object[0]).getPermission(), user)){
 				if(message.getGuild().getMember(message.getJDA().getSelfUser()).hasPermission(Permission.MESSAGE_WRITE)) message.getTextChannel().sendMessage(user.getAsMention()+"\n```diff\n-You don't have permission to perform this command.```").queue();
 				return true;
 			}
