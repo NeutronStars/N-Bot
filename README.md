@@ -1,4 +1,4 @@
-__**[** *N-Bot API* **]**__
+# __**[** *N-Bot API* **]**__
 
 N-Bot API is an __*open-source project*__ using **JDA** which will allow you **create/personalize** your bots simplest through a plugin system.
 
