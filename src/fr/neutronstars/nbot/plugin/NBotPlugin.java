@@ -13,13 +13,13 @@ import net.dv8tion.jda.core.JDA;
  * @since 1.0
  */
 
-public abstract class JDAPlugin{
+public abstract class NBotPlugin{
 
-	private JDAClassLoader jdaClassLoader;
+	private NBotClassLoader jdaClassLoader;
 	private final String[] authors;
 	private String name, version;
 	
-	public JDAPlugin(String... authors){
+	public NBotPlugin(String... authors){
 		this.authors = authors;
 	}
 	
@@ -67,7 +67,7 @@ public abstract class JDAPlugin{
 	 * @since 1.0
 	 */
 	public final NBotLogger getLogger(){
-		return NBotLogger.LOGGER;
+		return NBotLogger.getLogger();
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public abstract class JDAPlugin{
 	 */
 	public void onDisable(){}
 	
-	protected void setPluginClassLoader(JDAClassLoader jdaClassLoader){
+	protected void setPluginClassLoader(NBotClassLoader jdaClassLoader){
 		this.jdaClassLoader = jdaClassLoader;
 	}
 	

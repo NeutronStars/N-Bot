@@ -2,6 +2,8 @@ package fr.neutronstars.nbot.listener;
 
 import fr.neutronstars.nbot.NBot;
 import fr.neutronstars.nbot.command.CommandMap;
+import fr.neutronstars.nbot.entity.Message;
+import fr.neutronstars.nbot.entity.User;
 import fr.neutronstars.nbot.logger.NBotLogger;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -16,6 +18,7 @@ import net.dv8tion.jda.core.hooks.EventListener;
  */
 public class BotListener implements EventListener{
 
+	private final NBotLogger logger = NBotLogger.getLogger();
 	private final CommandMap commandMap;
 	
 	public BotListener(CommandMap commandMap){
@@ -29,11 +32,19 @@ public class BotListener implements EventListener{
 
 	public void messageReceivedEvent(MessageReceivedEvent event){
 		if(event.getAuthor().equals(event.getJDA().getSelfUser())) return;
-		String message = event.getMessage().getContent();
-		if(message.startsWith(commandMap.getTag())){
-			message = message.replaceFirst(commandMap.getTag(), "");
-			if(commandMap.onCommand(event.getAuthor(), message, event.getMessage()))
-				if(event.getGuild() != null && event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
+		String msg = event.getMessage().getContent();
+		if(msg.startsWith(commandMap.getTag())){
+			Message message = new Message(event.getMessage());
+			User userEntity = new User(event.getAuthor());
+			msg = msg.replaceFirst(commandMap.getTag(), "");
+			String[] commands = msg.replace("\\|", "&SPLITNBOT&").split("&SPLITNBOT&");
+			boolean execute = false;
+			for(int i = 0; i < commands.length; i++){
+				String command = commands[i];
+				while (command.startsWith(" ")) command = command.replaceFirst(" ", "");
+				if(commandMap.onCommand(userEntity, command, message) && !execute) execute = true;
+			}
+			if(execute && message.getChannel().isTextChannel() && message.getChannel().getTextChannel().getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) && !message.isDelete()) message.delete();
 			return;
 		}
 	}
@@ -48,7 +59,7 @@ public class BotListener implements EventListener{
 			builder.append("\n     -> ").append(g.getName());
 		});
 		builder.append("\n========================================");
-		NBotLogger.LOGGER.log(builder.toString());
+		logger.log(builder.toString());
 	}
 
 }

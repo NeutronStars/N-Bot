@@ -55,6 +55,9 @@ public @interface Command {
 	 * @author NeutronStars
 	 * @since 1.0
 	 */
+	
+	public boolean executePrivate() default false;
+	
 	public enum Executor{
 		USER, CONSOLE, ALL;
 	}

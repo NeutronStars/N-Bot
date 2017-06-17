@@ -9,13 +9,14 @@ import fr.neutronstars.nbot.command.Command.Permission;
 import fr.neutronstars.nbot.command.CommandManager;
 import fr.neutronstars.nbot.command.CommandMap;
 import fr.neutronstars.nbot.command.SimpleCommand;
-import fr.neutronstars.nbot.logger.NBotLogger;
+import fr.neutronstars.nbot.entity.Channel;
+import fr.neutronstars.nbot.entity.CommandSender;
+import fr.neutronstars.nbot.entity.ConsoleEntity;
+import fr.neutronstars.nbot.entity.User;
+import fr.neutronstars.nbot.entity.UserEntity;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageEmbed.Field;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.entities.impl.UserImpl;
 
 /**
  * Default Command of NBot
@@ -36,35 +37,42 @@ public final class DefaultCommand implements CommandManager {
 	 * @param channel
 	 * @since 1.0
 	 */
-	@Command(name="help",description="Shows the list of commands.",alias={"?"})
-	private void help(User user, TextChannel textChannel){
-		if(user == null) helpConsole();
-		else if(textChannel != null) helpUser(user, textChannel);
+	@Command(name="help",description="Shows the command list.",alias={"?"},executePrivate=true)
+	private void help(CommandSender sender, Channel channel){
+		if(sender instanceof ConsoleEntity) helpConsole(sender.getConsoleEntity());
+		else helpUser(sender.getUserEntity(), channel);
 	}
 	
-	private void helpConsole(){
+	private void helpConsole(ConsoleEntity sender){
 		StringBuilder builder = new StringBuilder("\n========================================").append("\nCommands list :\n\n");
 		for(SimpleCommand command : commandMap.getCommands()){
 			if(command.getExecutor() == Executor.USER) continue;	
-			builder.append("\n").append(command.getName()).append(" -> ").append(command.getDescription());
+			builder.append("\n-> ").append(command.getName());
+			if(command.hasAlias()) builder.append("\n     aliases -> ").append(command.getAliasString());
+			builder.append("\n     description -> ").append(command.getDescription());
 		}
 		builder.append("\n========================================");
-		NBotLogger.LOGGER.log(builder.toString());
+		sender.sendMessage(builder.toString());
 	}
 	
-	private void helpUser(User user, TextChannel channel){
+	private void helpUser(UserEntity user, Channel channel){
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setAuthor(user.getName(), null, user.getAvatarUrl()+"?size=256");
-		builder.setTitle("Command lists");
-		builder.setDescription("Shows the list of commands of the guild "+channel.getGuild().getName());
+		if(channel.isTextChannel()) builder.setTitle(channel.getTextChannel().getGuild().getName()+" server command list");
+		else builder.setTitle("Private channel command list");
+		builder.setDescription("Prefix command : "+commandMap.getTag());
 		builder.setColor(Color.CYAN);
 		for(SimpleCommand command : commandMap.getCommands()){
-			if(command.getExecutor() == Executor.CONSOLE || !NBot.getNBot().getServer(channel.getGuild()).hasPermission(command.getPermission(), user)) continue;
+			if(command.getExecutor() == Executor.CONSOLE
+			   || (channel.isTextChannel() && !NBot.getNBot().getServer(channel.getTextChannel().getGuild()).hasPermission(command.getPermission(), (User)user))
+			   || (channel.isPrivateChannel() && !command.canExecutePrivate())) continue;
 			builder.addField(new Field(command.getName(), (command.hasAlias() ? "[>](1) Alias : "+command.getAliasString()+"\n" : "")+"[>](2) Description : "+command.getDescription(), false));
 		}
-		if(!user.hasPrivateChannel()) user.openPrivateChannel().complete();
-		((UserImpl)user).getPrivateChannel().sendMessage(builder.build()).queue();
+		user.sendMessage(builder.build());
+		if(channel.isTextChannel()) channel.sendMessage(user.getAsMention()+" check your private message.");
 	}
+	
+	
 	
 	/**
 	 * Stop Command.
@@ -83,23 +91,24 @@ public final class DefaultCommand implements CommandManager {
 	 * @since 1.0
 	 */
 	@Command(name="operator",permission=Permission.ADMINISTRATOR,description="Add/Remove a operator of the guild.",alias={"op"})
-	private void operator(User user, TextChannel channel, String[] args){
-		if(user != null && !channel.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.core.Permission.MESSAGE_WRITE)) return;
+	private void operator(CommandSender sender, Channel channel, String[] args){
+		if(sender.isUserEntity() && !channel.getTextChannel().getGuild().getSelfMember().hasPermission(net.dv8tion.jda.core.Permission.MESSAGE_WRITE)) return;
 		Guild guild = null;
 		User target = null;
-		if((user == null && args.length < 3) || (user != null && args.length < 2)){
-			if(user == null) NBotLogger.LOGGER.log("-> operator <add/remove> <ID Guild> <Id User>");
-			else if(channel != null) channel.sendMessage(user.getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```").queue();
+		if((sender.isConsoleEntity() && args.length < 3) || (sender.isUserEntity() && args.length < 2)){
+			if(sender.isConsoleEntity()) sender.getConsoleEntity().sendMessage("-> operator <add/remove> <ID Guild> <Id User>");
+			else channel.sendMessage(sender.getUserEntity().getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```");
 		}
 		String param = args[0];
-		guild = user == null ? NBot.getNBot().getJDA().getGuildById(args[1]) : channel != null ? channel.getGuild() : null;
-		target = NBot.getNBot().getJDA().getUserById(user == null ? args[2] : args[1]);
+		guild = sender.isConsoleEntity() ? NBot.getNBot().getJDA().getGuildById(args[1]) : channel.getTextChannel().getGuild();
+		target = new User(NBot.getNBot().getJDA().getUserById(sender.isConsoleEntity() ? args[2] : args[1]));
+		
 		if(operator(param, guild, target)){
-			if(user == null) NBotLogger.LOGGER.log(target.getName()+" as been "+(param.equalsIgnoreCase("add") ? "added" : "removed")+" as operator to the guild "+guild.getName()+".");
-			else channel.sendMessage(target.getAsMention()+" as been "+(param.equalsIgnoreCase("add") ? "added" : "removed")+" as operator.").queue();
+			if(sender.isConsoleEntity()) sender.getConsoleEntity().sendMessage(target.getName()+" as been "+(param.equalsIgnoreCase("add") ? "added" : "removed")+" as operator to the guild "+guild.getName()+".");
+			else channel.sendMessage(target.getAsMention()+" as been "+(param.equalsIgnoreCase("add") ? "added" : "removed")+" as operator.");
 		}else{
-			if(user == null) NBotLogger.LOGGER.log("-> operator <add/remove> <ID Guild> <Id User>");
-			else if(channel != null) channel.sendMessage(user.getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```").queue();
+			if(sender.isConsoleEntity()) sender.getConsoleEntity().sendMessage("-> operator <add/remove> <ID Guild> <Id User>");
+			else channel.sendMessage(sender.getUserEntity().getAsMention()+" ->\n```diff\n-"+commandMap.getTag()+"operator <add/remove> <Id User>```");
 		}
 	}
 	
@@ -111,5 +120,17 @@ public final class DefaultCommand implements CommandManager {
 		return true;
 	}
 	
-	
+	@Command(name="info",description="Info NBot.",executePrivate=true)
+	private void info(CommandSender sender, Channel channel){
+		String info = "\nInfo NBot: \n  -Created by NeutronStars"
+				 	 +"\nGuild count: "+NBot.getNBot().getJDA().getGuilds().size()
+				 	 +"\nVersion: "+NBot.getNBot().getVersion();
+		if(sender.isConsoleEntity())
+			sender.getConsoleEntity().sendMessage("\n========================================"
+												 + info
+												 +"\n========================================");
+		else channel.sendMessage("```yml\n"+info+"```");
+		
+			
+	}
 }

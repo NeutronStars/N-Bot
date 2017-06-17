@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import fr.neutronstars.nbot.command.CommandMap;
+import fr.neutronstars.nbot.entity.ConsoleEntity;
 import fr.neutronstars.nbot.listener.BotListener;
 import fr.neutronstars.nbot.logger.NBotLogger;
 import fr.neutronstars.nbot.plugin.PluginManager;
@@ -38,11 +39,13 @@ public final class NBot implements Runnable{
 		return nBot;
 	}
 	
+	private final ConsoleEntity consoleEntity = new ConsoleEntity();
 	private final Map<String, ServerBot> servers = new HashMap<>();
 	private final Thread thread = new Thread(this, "nbot");
 	private final Scanner scanner = new Scanner(System.in);
 	private final Random random = new Random();
 	private final PluginManager pluginManager;
+	private final String version = "1.1.0";
 	private final CommandMap commandMap;
 	private final JDA jda;
 	
@@ -62,6 +65,14 @@ public final class NBot implements Runnable{
 	 */
 	public JDA getJDA() {
 		return jda;
+	}
+	
+	public String getVersion() {
+		return version;
+	}
+	
+	public ConsoleEntity getConsoleEntity() {
+		return consoleEntity;
 	}
 	
 	/**
@@ -134,20 +145,29 @@ public final class NBot implements Runnable{
 	
 	public void run() {
 		while (running){
-			if(scanner.hasNextLine()) commandMap.onCommand(null, scanner.nextLine(), null);
+			if(scanner.hasNextLine()){
+				String[] commands = scanner.nextLine().replace("\\|", "&SPLITNBOT&").split("&SPLITNBOT&");
+				for(int i = 0; i < commands.length; i++){
+					String command = commands[i];
+					while(command.startsWith(" ")) command = command.replaceFirst(" ", "");
+					commandMap.onCommand(consoleEntity, command, null);
+				}
+			}
 		}
 		
-		NBotLogger.LOGGER.log("Stopping a bot...\nGuilds saving...");
+		consoleEntity.sendMessage("Stopping a bot...");
+		pluginManager.disablePlugins();
+		consoleEntity.sendMessage("Guilds saving...");
 		servers.values().forEach(s->s.save());
-		NBotLogger.LOGGER.log("Guilds saved.");
+		consoleEntity.sendMessage("Guilds saved.");
 		jda.shutdown(false);
-		NBotLogger.LOGGER.log("Bot stopped.");
-		NBotLogger.LOGGER.close();
+		consoleEntity.sendMessage("Bot stopped.");
+		NBotLogger.getLogger().close();
 		System.exit(0);
 	}
 	
 	public static void main(String[] args) {
-		NBotLogger logger = NBotLogger.LOGGER;
+		NBotLogger logger = NBotLogger.getLogger();
 		try{
 			File folder = new File("config");
 			if(!folder.exists()) folder.mkdirs();
@@ -155,7 +175,7 @@ public final class NBot implements Runnable{
 			if(!file.exists() && args.length < 1){
 				BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 				writer.write("token=Insert your token\n");
-				writer.write("tag=selfbot.\n");
+				writer.write("tag=bot.\n");
 				writer.flush();
 				writer.close();
 				logger.log("Please, complete the file \"info.txt\" in the folder \"config\".");

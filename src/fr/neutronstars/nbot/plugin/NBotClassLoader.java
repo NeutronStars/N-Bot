@@ -9,18 +9,18 @@ import java.net.URLClassLoader;
  * @since 1.0
  */
 
-final class JDAClassLoader extends URLClassLoader{
+final class NBotClassLoader extends URLClassLoader{
 	
-	private JDAPlugin plugin;
+	private NBotPlugin plugin;
 	
-	protected JDAClassLoader(String main, ClassLoader parent,File file) throws Exception{
+	protected NBotClassLoader(String main, ClassLoader parent,File file) throws Exception{
 		super(new URL[]{file.toURI().toURL()}, parent);
 		Class<?> clazz = Class.forName(main, true, this);
-		plugin = clazz.asSubclass(JDAPlugin.class).newInstance();
+		plugin = clazz.asSubclass(NBotPlugin.class).newInstance();
 		plugin.setPluginClassLoader(this);
 	}
 	
-	public JDAPlugin getPlugin() {
+	public NBotPlugin getPlugin() {
 		return plugin;
 	}
 }

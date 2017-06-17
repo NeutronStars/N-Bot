@@ -22,13 +22,17 @@ public final class NBotLogger implements LogListener{
 	 * Main Logger
 	 * @since 1.0
 	 */
-	public final static NBotLogger LOGGER = newLogger();
+	private final static NBotLogger LOGGER = newLogger();
 	
 	private static NBotLogger newLogger(){
 		try{
 			return new NBotLogger();
 		}catch(IOException exception){}
 		return null;
+	}
+	
+	public static NBotLogger getLogger() {
+		return LOGGER;
 	}
 	
 	private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss");

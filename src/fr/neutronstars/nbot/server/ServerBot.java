@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.neutronstars.nbot.command.Command.Permission;
+import fr.neutronstars.nbot.entity.User;
 import fr.neutronstars.nbot.logger.NBotLogger;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.User;
 
 /**
  * 
@@ -43,6 +43,8 @@ public final class ServerBot {
 	 * @since 1.0
 	 */
 	private final String id;
+	
+	private final NBotLogger logger = NBotLogger.getLogger();
 	
 	public ServerBot(Guild guild){
 		administratorId = guild.getOwner().getUser().getId();
@@ -81,8 +83,8 @@ public final class ServerBot {
 	public boolean hasPermission(Permission permission, User user){
 		switch(permission){
 			case NONE : return true;
-			case OPERATOR : return administratorId.equalsIgnoreCase(user.getId()) || user.getJDA().getGuildById(id).getMember(user).hasPermission(net.dv8tion.jda.core.Permission.ADMINISTRATOR) || operators.contains(user.getId());
-			case ADMINISTRATOR : return administratorId.equalsIgnoreCase(user.getId()) || user.getJDA().getGuildById(id).getMember(user).hasPermission(net.dv8tion.jda.core.Permission.ADMINISTRATOR);
+			case OPERATOR : return administratorId.equalsIgnoreCase(user.getId()) || user.getJDA().getGuildById(id).getMember(user.getUser()).hasPermission(net.dv8tion.jda.core.Permission.ADMINISTRATOR) || operators.contains(user.getId());
+			case ADMINISTRATOR : return administratorId.equalsIgnoreCase(user.getId()) || user.getJDA().getGuildById(id).getMember(user.getUser()).hasPermission(net.dv8tion.jda.core.Permission.ADMINISTRATOR);
 		}
 		return false;
 	}
@@ -95,7 +97,7 @@ public final class ServerBot {
 				addOperator(id);
 			}
 		}catch (Exception e){
-			NBotLogger.LOGGER.logThrowable(e);
+			logger.logThrowable(e);
 		}
 	}
 	
@@ -107,7 +109,7 @@ public final class ServerBot {
 				bufferedWriter.newLine();
 			}
 		}catch (Exception e){
-			NBotLogger.LOGGER.logThrowable(e);
+			logger.logThrowable(e);
 		}
 	}
 }

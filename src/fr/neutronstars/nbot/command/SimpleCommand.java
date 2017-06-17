@@ -16,15 +16,17 @@ public final class SimpleCommand {
 	private final String description;
 	private final Permission permission;
 	private final CommandManager commandManager;
+	private final boolean executePrivate;
 	private final String[] alias;
 	private final Method method;
 	
-	public SimpleCommand(String name, Executor executor, String description, Permission permission,CommandManager commandManager, String[] alias, Method method){
+	public SimpleCommand(String name, Executor executor, String description, Permission permission,CommandManager commandManager, boolean executePrivate,String[] alias, Method method){
 		this.name = name;
 		this.executor = executor;
 		this.description = description;
 		this.permission = permission;
 		this.commandManager = commandManager;
+		this.executePrivate = executePrivate;
 		this.alias = alias;
 		this.method = method;
 	}
@@ -47,6 +49,10 @@ public final class SimpleCommand {
 	
 	public CommandManager getCommandManager() {
 		return commandManager;
+	}
+	
+	public boolean canExecutePrivate(){
+		return executePrivate;
 	}
 	
 	public boolean hasAlias(){
