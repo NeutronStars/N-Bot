@@ -6,6 +6,12 @@ import java.time.OffsetDateTime;
 
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
+/**
+ * The entities discord (User or Channel)
+ * @author NeutronStars
+ * @version 1.0.0
+ * @since 1.1.0
+ */
 public interface DiscordEntity extends Entity {
 
 	public String getId();

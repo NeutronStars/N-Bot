@@ -17,6 +17,12 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 
+/**
+ * Message Discord
+ * @author NeutronStars
+ * @version 1.0.0
+ * @since 1.1.0
+ */
 public final class Message {
 
 	private net.dv8tion.jda.core.entities.Message message;

@@ -14,7 +14,8 @@ import net.dv8tion.jda.core.hooks.EventListener;
 
 /**
  * @author NeutronStars
- * @since 1.0
+ * @version 1.1.0
+ * @since 1.0.0
  */
 public class BotListener implements EventListener{
 

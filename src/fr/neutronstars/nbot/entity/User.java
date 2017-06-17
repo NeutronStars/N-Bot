@@ -12,6 +12,12 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.impl.UserImpl;
 
+/**
+ * User Discord.
+ * @author NeutronStars
+ * @version 1.0.0
+ * @since 1.1.0
+ */
 public class User implements UserEntity {
 
 	private final net.dv8tion.jda.core.entities.User user;

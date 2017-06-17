@@ -11,6 +11,12 @@ import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.requests.restaction.pagination.MessagePaginationAction;
 
+/**
+ * Discord Channel. (Text or Private.)
+ * @author NeutronStars
+ * @version 1.0.0
+ * @since 1.1.0
+ */
 public interface ChannelEntity extends DiscordEntity{
 	
 	public String getLatestMessageId();

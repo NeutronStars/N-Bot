@@ -6,7 +6,8 @@ import java.net.URLClassLoader;
 
 /**
  * @author NeutronStars
- * @since 1.0
+ * @version 1.1.0
+ * @since 1.0.0
  */
 
 final class NBotClassLoader extends URLClassLoader{

@@ -22,8 +22,10 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Guild;
 
 /**
+ * Main Class.
  * @author NeutronStars
- * @since 1.0 
+ * @version 1.1.0
+ * @since 1.0.0
  */
 
 public final class NBot implements Runnable{
@@ -38,7 +40,7 @@ public final class NBot implements Runnable{
 	public static NBot getNBot() {
 		return nBot;
 	}
-	
+
 	private final ConsoleEntity consoleEntity = new ConsoleEntity();
 	private final Map<String, ServerBot> servers = new HashMap<>();
 	private final Thread thread = new Thread(this, "nbot");
@@ -60,25 +62,35 @@ public final class NBot implements Runnable{
 	
 	/**
 	 * Retrieves the instance of the class JDA.
-	 * @return JDA
-	 * @since 1.0
+	 * @return {@link JDA}
+	 * @since 1.0.0
 	 */
 	public JDA getJDA() {
 		return jda;
 	}
-	
+
+	/**
+	 * Get API version 
+	 * @return version
+	 * @since 1.1.0
+	 */
 	public String getVersion() {
 		return version;
 	}
 	
+	/**
+	 * Get the Console.
+	 * @return {@link ConsoleEntity}
+	 * @since 1.1.0
+	 */
 	public ConsoleEntity getConsoleEntity() {
 		return consoleEntity;
 	}
 	
 	/**
 	 * Retrieves the instance of the class PluginManager.
-	 * @return PluginManager
-	 * @since 1.0
+	 * @return {@link PluginManager}
+	 * @since 1.0.0
 	 */
 	public PluginManager getPluginManager() {
 		return pluginManager;
@@ -87,8 +99,8 @@ public final class NBot implements Runnable{
 	/**
 	 * Retrieves a class ServerBot.
 	 * @param guild
-	 * @return ServerBot
-	 * @since 1.0
+	 * @return {@link ServerBot}
+	 * @since 1.0.0
 	 */
 	public ServerBot getServer(Guild guild){
 		return loadGuild(guild);
@@ -97,7 +109,7 @@ public final class NBot implements Runnable{
 	/**
 	 * Retrieves the tag of command.
 	 * @return String
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public String getCommandTag() {
 		return commandMap.getTag();
@@ -106,8 +118,8 @@ public final class NBot implements Runnable{
 	/**
 	 * Load a instance of ServerBot.
 	 * @param guild
-	 * @return ServerBot
-	 * @since 1.0
+	 * @return {@link ServerBot}
+	 * @since 1.0.0
 	 */
 	public ServerBot loadGuild(Guild guild){
 		if(!servers.containsKey(guild.getId())) servers.put(guild.getId(), new ServerBot(guild));
@@ -118,7 +130,7 @@ public final class NBot implements Runnable{
 	 * The nextInt of the class {@link Random}
 	 * @param index
 	 * @return Integer
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public int nextInt(int index){
 		return random.nextInt(index);
@@ -126,7 +138,7 @@ public final class NBot implements Runnable{
 	
 	/**
 	 * Start the application.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void start(){
 		if(running) return;
@@ -136,7 +148,7 @@ public final class NBot implements Runnable{
 	
 	/**
 	 * Stop the application.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void stop(){
 		if(!running) return;

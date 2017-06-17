@@ -21,7 +21,8 @@ import net.dv8tion.jda.core.entities.MessageEmbed.Field;
 /**
  * Default Command of NBot
  * @author NeutronStars
- * @since 1.0
+ * @version 1.1.0
+ * @since 1.0.0
  */
 public final class DefaultCommand implements CommandManager {
 
@@ -33,9 +34,9 @@ public final class DefaultCommand implements CommandManager {
 	
 	/**
 	 * Help Command.
-	 * @param user
+	 * @param sender
 	 * @param channel
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Command(name="help",description="Shows the command list.",alias={"?"},executePrivate=true)
 	private void help(CommandSender sender, Channel channel){
@@ -76,7 +77,7 @@ public final class DefaultCommand implements CommandManager {
 	
 	/**
 	 * Stop Command.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Command(name="stop",type=Executor.CONSOLE,description="Stop the bot.")
 	private void stop(){
@@ -85,10 +86,10 @@ public final class DefaultCommand implements CommandManager {
 	
 	/**
 	 * Operator Command.
-	 * @param user
+	 * @param sender
 	 * @param channel
 	 * @param args
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	@Command(name="operator",permission=Permission.ADMINISTRATOR,description="Add/Remove a operator of the guild.",alias={"op"})
 	private void operator(CommandSender sender, Channel channel, String[] args){

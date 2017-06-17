@@ -14,7 +14,8 @@ import fr.neutronstars.nbot.logger.NBotLogger;
 
 /**
  * @author NeutronStars
- * @since 1.0
+ * @version 1.1.0
+ * @since 1.0.0
  */
 
 public final class PluginManager {
@@ -81,7 +82,7 @@ public final class PluginManager {
 	/**
 	 * Register a command in the application.
 	 * @param commandManager
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public final void registerCommand(CommandManager... commandManager){
 		NBot.getNBot().getPluginManager().registerCommands(commandManager);

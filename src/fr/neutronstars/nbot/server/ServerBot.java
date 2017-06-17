@@ -16,31 +16,32 @@ import net.dv8tion.jda.core.entities.Guild;
 /**
  * 
  * @author NeutronStars
+ * @version 1.1.0
  * @since 1.0
  */
 public final class ServerBot {
 
 	/**
 	 * List of operator of the guild.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private final List<String> operators = new ArrayList<>();
 	
 	/**
 	 * Creator ID of the guild.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private final String administratorId;
 	
 	/**
 	 * Folder of the guild.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private final File folder, permission;
 	
 	/**
 	 * ID of the guild.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	private final String id;
 	
@@ -58,7 +59,7 @@ public final class ServerBot {
 	/**
 	 * Add Operator in the Server.
 	 * @param userID
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void addOperator(String userID){
 		if(!operators.contains(userID)) operators.add(userID);
@@ -67,7 +68,7 @@ public final class ServerBot {
 	/**
 	 * Remove Operator in the Server.
 	 * @param userID
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void removeOperator(String userID){
 		if(operators.contains(userID)) operators.remove(userID);
@@ -78,7 +79,7 @@ public final class ServerBot {
 	 * @param permission
 	 * @param user
 	 * @return Boolean
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public boolean hasPermission(Permission permission, User user){
 		switch(permission){

@@ -4,6 +4,12 @@ import fr.neutronstars.nbot.NBot;
 import fr.neutronstars.nbot.logger.NBotLogger;
 import net.dv8tion.jda.core.JDA;
 
+/**
+ * The console entity.
+ * @author NeutronStars
+ * @version 1.0.0
+ * @since 1.1.0
+ */
 public final class ConsoleEntity implements Entity, CommandSender{
 	
 	private final NBotLogger logger = NBotLogger.getLogger();

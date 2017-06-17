@@ -10,7 +10,8 @@ import net.dv8tion.jda.core.JDA;
 /**
  * Main class for the plugins.
  * @author NeutronStars
- * @since 1.0
+ * @version 1.1.0
+ * @since 1.0.0
  */
 
 public abstract class NBotPlugin{
@@ -46,7 +47,7 @@ public abstract class NBotPlugin{
 	/**
 	 * Register a command in the application.
 	 * @param commandManager
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public final void registerCommand(CommandManager... commandManager){
 		NBot.getNBot().getPluginManager().registerCommands(commandManager);
@@ -55,7 +56,7 @@ public abstract class NBotPlugin{
 	/**
 	 * Retrieves the instance of the class JDA.
 	 * @return JDA
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public final JDA getJDA(){
 		return NBot.getNBot().getJDA();
@@ -64,7 +65,7 @@ public abstract class NBotPlugin{
 	/**
 	 * Retrieves the instance of the class NBotLogger.
 	 * @return NBotLogger
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public final NBotLogger getLogger(){
 		return NBotLogger.getLogger();
@@ -72,13 +73,13 @@ public abstract class NBotPlugin{
 	
 	/**
 	 * Call when loading the plugin.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void onLoad(){}
 	
 	/**
 	 * Call when disabling the plugin.
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void onDisable(){}
 	

@@ -13,6 +13,7 @@ import net.dv8tion.jda.core.utils.SimpleLog.LogListener;
 /**
  * Console Logger
  * @author NeutronStars
+ * @version 1.1.0
  * @since 1.0
  */
 
@@ -31,6 +32,11 @@ public final class NBotLogger implements LogListener{
 		return null;
 	}
 	
+	/**
+	 * Get Logger
+	 * @return {@link NBotLogger}
+	 * @since 1.1.0
+	 */
 	public static NBotLogger getLogger() {
 		return LOGGER;
 	}
@@ -59,7 +65,7 @@ public final class NBotLogger implements LogListener{
 	/**
 	 * Log info in the console.
 	 * @param msg
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void log(String msg){
 		log(Level.INFO, msg);
@@ -69,7 +75,7 @@ public final class NBotLogger implements LogListener{
 	 * Log info in the console but with level for indication.
 	 * @param level
 	 * @param msg
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void log(Level level, String msg){
 		log(level, msg, false);
@@ -91,7 +97,7 @@ public final class NBotLogger implements LogListener{
 	/**
 	 * Log a exception in the console.
 	 * @param throwable
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public void logThrowable(Throwable throwable){
 		logThrowable(throwable, false);

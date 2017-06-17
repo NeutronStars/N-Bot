@@ -4,6 +4,12 @@ import java.util.List;
 
 import net.dv8tion.jda.core.entities.Guild;
 
+/**
+ * User Discord.
+ * @author NeutronStars
+ * @version 1.0.0
+ * @since 1.1.0
+ */
 public interface UserEntity extends DiscordEntity, CommandSender{
 	
 	public String getDiscriminator();

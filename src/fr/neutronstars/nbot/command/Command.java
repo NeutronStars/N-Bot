@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 
 /**
  * @author NeutronStars
- * @since 1.0
+ * @version 1.1.0
+ * @since 1.0.0
  */
 
 @Documented
@@ -19,45 +20,51 @@ public @interface Command {
 	/**
 	 * Name of the Command
 	 * @return String
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public String name();
 	
 	/**
 	 * Description of the Command
 	 * @return String
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public String description() default "hasn't description.";
 	
 	/**
 	 * Executor type of the Command
 	 * @return Executor
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public Executor type() default Executor.ALL;
 	
 	/**
 	 * Permission of the Command
 	 * @return Permission
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public Permission permission() default Permission.NONE;
 	
 	/**
 	 * Alias of the Command
 	 * @return String[]
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public String[] alias() default {};
-	/**
-	 * Executor type of the Command 
-	 * @author NeutronStars
-	 * @since 1.0
-	 */
 	
+	/**
+	 * Can send the command in the Private channel 
+	 * @author NeutronStars
+	 * @since 1.1.0
+	 */
 	public boolean executePrivate() default false;
 	
+	/**
+	 * Who can execute command
+	 * @author NeutronStars
+	 * @version 1.0.0
+	 * @since 1.0.0
+	 */
 	public enum Executor{
 		USER, CONSOLE, ALL;
 	}
@@ -65,7 +72,7 @@ public @interface Command {
 	/**
 	 * Permission of the Command 
 	 * @author NeutronStars
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public enum Permission {
 		NONE, OPERATOR, ADMINISTRATOR;

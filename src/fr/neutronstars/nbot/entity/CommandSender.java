@@ -1,5 +1,11 @@
 package fr.neutronstars.nbot.entity;
 
+/**
+ * Entities who can execute commands.
+ * @author NeutronStars
+ * @version 1.0.0
+ * @since 1.1.0
+ */
 public interface CommandSender {
 	
 	public String getName();
