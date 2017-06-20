@@ -15,6 +15,8 @@ import fr.neutronstars.nbot.entity.ConsoleEntity;
 import fr.neutronstars.nbot.listener.BotListener;
 import fr.neutronstars.nbot.logger.NBotLogger;
 import fr.neutronstars.nbot.plugin.PluginManager;
+import fr.neutronstars.nbot.runnable.NBotRunnable;
+import fr.neutronstars.nbot.runnable.TaskManager;
 import fr.neutronstars.nbot.server.ServerBot;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -24,7 +26,7 @@ import net.dv8tion.jda.core.entities.Guild;
 /**
  * Main Class.
  * @author NeutronStars
- * @version 1.1.0
+ * @version 1.1.1
  * @since 1.0.0
  */
 
@@ -35,7 +37,7 @@ public final class NBot implements Runnable{
 	/**
 	 * Retrieves the instance of the class NBot.
 	 * @return NBot
-	 * @since 1.0
+	 * @since 1.0.0
 	 */
 	public static NBot getNBot() {
 		return nBot;
@@ -47,9 +49,15 @@ public final class NBot implements Runnable{
 	private final Scanner scanner = new Scanner(System.in);
 	private final Random random = new Random();
 	private final PluginManager pluginManager;
-	private final String version = "1.1.0";
+	private final String version = "1.1.1";
 	private final CommandMap commandMap;
 	private final JDA jda;
+	
+	/**
+	 * Tasks List
+	 * @since 1.1.1
+	 */
+	private final TaskManager tasks = new TaskManager();
 	
 	private boolean running;
 	
@@ -144,6 +152,7 @@ public final class NBot implements Runnable{
 		if(running) return;
 		running = true;
 		thread.start();
+		tasks.start();
 	}
 	
 	/**
@@ -153,7 +162,27 @@ public final class NBot implements Runnable{
 	public void stop(){
 		if(!running) return;
 		running = false;
+		tasks.stop();
 	}
+	
+	/**
+	 * Register NBotRunnable
+	 * @param runnable
+	 * @since 1.1.1
+	 */
+	public void registerRunnable(NBotRunnable runnable){
+		tasks.registerRunnable(runnable);
+	}
+	
+	/**
+	 * Run task
+	 * @param runnable
+	 * @since 1.1.1
+	 */
+	public void runTask(NBotRunnable runnable){
+		tasks.runTask(runnable);
+	}
+	
 	
 	public void run() {
 		while (running){
