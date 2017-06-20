@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.neutronstars</groupId>
   <artifactId>N-Bot</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.1</version>
   <name>N-Bot</name>
   
   <build>
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>3.1.1_210</version>
+      <version>3.1.1_213</version>
     </dependency>
   </dependencies>
   
