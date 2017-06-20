@@ -158,7 +158,7 @@ public final class Message {
 	}
 
 	public void editMessage(String arg0, Object... arg1){
-		message = message.editMessage(arg0, arg1).complete();
+		message = message.editMessageFormat(arg0, arg1).complete();
 	}
 
 	public void editMessage(net.dv8tion.jda.core.entities.Message arg0){

@@ -94,7 +94,7 @@ public class Channel implements ChannelEntity {
 	}
 
 	public void sendMessage(String format, Object... args) {
-		channel.sendMessage(format, args);
+		channel.sendMessageFormat(format, args);
 	}
 
 	public String getLatestMessageId() {
@@ -201,11 +201,11 @@ public class Channel implements ChannelEntity {
 	}
 
 	public Message editMessageById(String messageId, String format, Object... args) {
-		return new Message(channel.editMessageById(messageId, format, args).complete());
+		return new Message(channel.editMessageFormatById(messageId, format, args).complete());
 	}
 
 	public Message editMessageById(long messageId, String format, Object... args) {
-		return new Message(channel.editMessageById(messageId, format, args).complete());
+		return new Message(channel.editMessageFormatById(messageId, format, args).complete());
 	}
 
 	public Message editMessageById(long messageId, Message newContent) {
