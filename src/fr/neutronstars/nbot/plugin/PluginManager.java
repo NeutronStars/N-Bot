@@ -3,6 +3,8 @@ package fr.neutronstars.nbot.plugin;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarFile;
@@ -14,7 +16,7 @@ import fr.neutronstars.nbot.logger.NBotLogger;
 
 /**
  * @author NeutronStars
- * @version 1.1.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 
@@ -78,7 +80,19 @@ public final class PluginManager {
 	public NBotPlugin getPlugin(String name){
 		return plugins.get(name);
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public <T extends NBotPlugin> T getPlugin(Class<T> clazz){
+		for(NBotPlugin plugin : getPlugins()){
+			if(plugin.getClass() == clazz) return (T) plugin;
+		}
+		return null;
+	}
+
+	public Collection<NBotPlugin> getPlugins(){
+		return new ArrayList<>(plugins.values());
+	}
+
 	/**
 	 * Register a command in the application.
 	 * @param commandManager

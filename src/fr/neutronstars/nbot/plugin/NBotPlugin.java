@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.JDA;
 /**
  * Main class for the plugins.
  * @author NeutronStars
- * @version 1.1.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 
@@ -93,5 +93,14 @@ public abstract class NBotPlugin{
 		} catch (IOException e) {
 			getLogger().logThrowable(e);
 		}
+	}
+
+	public String getAuthorsToString(){
+		StringBuilder builder = new StringBuilder();
+		for(String name : getAuthors()){
+			if(builder.length() != 0) builder.append(", ");
+			builder.append(name);
+		}
+		return builder.length() != 0 ? builder.toString() : builder.append("Not author").toString();
 	}
 }
