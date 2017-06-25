@@ -45,7 +45,7 @@ public class MyCommand implements CommandManager{
 and register your command class in the `onLoad()` method like this.
 
 ```java
-public class MyPlugin extends JDAPlugin{
+public class MyPlugin extends NBotPlugin{
 
   @Override
   public void onLoad(){
