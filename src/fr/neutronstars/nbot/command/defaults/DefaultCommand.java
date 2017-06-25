@@ -80,7 +80,7 @@ public final class DefaultCommand implements CommandManager {
 	 * @param channel
 	 * @since 1.1.2
 	 */
-	@Command(name="plugins",description="Show the plugins list.",alias={"plgs"})
+	@Command(name="plugins",description="Show the plugins list.",alias={"plgs"},executePrivate = true)
 	private void plugins(CommandSender sender, Channel channel){
 		if(sender.isConsoleEntity()){
 			StringBuilder builder = new StringBuilder("Plugins list :");
@@ -98,7 +98,7 @@ public final class DefaultCommand implements CommandManager {
 			builder.addField(new Field(plugin.getName(), "[>](1) Version : "+plugin.getVersion()+"\n[>](2) Author(s) : "+plugin.getAuthorsToString(), true));
 		}
 		if(builder.getFields().size() == 0) builder.setDescription("Don't use a plugin.");
-		builder.setFooter("Using API NSelfBot v"+NBot.getNBot().getVersion()+" created by NeutronStars", null);
+		builder.setFooter("Using API N-Bot v"+NBot.getNBot().getVersion()+" created by NeutronStars", null);
 		builder.setColor(Color.MAGENTA);
 		try{
 			channel.sendMessage(builder.build());
@@ -153,13 +153,14 @@ public final class DefaultCommand implements CommandManager {
 		return true;
 	}
 
-	@Command(name="info",description="Info NSelfBot.")
+	@Command(name="info",description="Info NBot.",executePrivate = true)
 	private void info(CommandSender sender, Channel channel){
 		if(sender.isConsoleEntity())
 			sender.getConsoleEntity().sendMessage("\n========================================"
-					+"\nNSelfBot: \n  -Created by NeutronStars"
+					+"\nNBot: \n  -Created by NeutronStars"
 					+"\nVersion: "+ NBot.getNBot().getVersion()
-					+"\nLink:\n  GitHub: https://github.com/NeutronStars/N-SelfBot"
+					+"\nGuilds: "+NBot.getNBot().getJDA().getGuilds().size()
+					+"\nLink:\n  GitHub: https://github.com/NeutronStars/N-Bot"
 					+"\n========================================");
 		else{
 			EmbedBuilder builder = new EmbedBuilder();
