@@ -26,7 +26,7 @@ import net.dv8tion.jda.core.entities.Guild;
 /**
  * Main Class.
  * @author NeutronStars
- * @version 1.1.1
+ * @version 1.1.2
  * @since 1.0.0
  */
 
@@ -49,7 +49,7 @@ public final class NBot implements Runnable{
 	private final Scanner scanner = new Scanner(System.in);
 	private final Random random = new Random();
 	private final PluginManager pluginManager;
-	private final String version = "1.1.1";
+	private final String version = "1.1.2";
 	private final CommandMap commandMap;
 	private final JDA jda;
 	
