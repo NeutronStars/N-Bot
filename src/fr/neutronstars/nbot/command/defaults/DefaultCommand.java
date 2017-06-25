@@ -14,6 +14,7 @@ import fr.neutronstars.nbot.entity.CommandSender;
 import fr.neutronstars.nbot.entity.ConsoleEntity;
 import fr.neutronstars.nbot.entity.User;
 import fr.neutronstars.nbot.entity.UserEntity;
+import fr.neutronstars.nbot.plugin.NBotPlugin;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageEmbed.Field;
@@ -21,7 +22,7 @@ import net.dv8tion.jda.core.entities.MessageEmbed.Field;
 /**
  * Default Command of NBot
  * @author NeutronStars
- * @version 1.1.0
+ * @version 1.1.2
  * @since 1.0.0
  */
 public final class DefaultCommand implements CommandManager {
@@ -72,8 +73,39 @@ public final class DefaultCommand implements CommandManager {
 		user.sendMessage(builder.build());
 		if(channel.isTextChannel()) channel.sendMessage(user.getAsMention()+" check your private message.");
 	}
-	
-	
+
+	/**
+	 * Show the command list
+	 * @param sender
+	 * @param channel
+	 * @since 1.1.2
+	 */
+	@Command(name="plugins",description="Show the plugins list.",alias={"plgs"})
+	private void plugins(CommandSender sender, Channel channel){
+		if(sender.isConsoleEntity()){
+			StringBuilder builder = new StringBuilder("Plugins list :");
+			for(NBotPlugin plugin : NBot.getNBot().getPluginManager().getPlugins()){
+				builder.append("\n").append(plugin.getName()).append("\n   version : ").append(plugin.getVersion()).append("\n   author(s) : ").append(plugin.getAuthorsToString());
+			}
+			if(builder.length() < 15) builder.append("\nDon't use a plugin.");
+			sender.getConsoleEntity().sendMessage(builder.toString());
+			return;
+		}
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setTitle("Plugins list");
+		builder.setDescription("|--------------|");
+		for(NBotPlugin plugin : NBot.getNBot().getPluginManager().getPlugins()){
+			builder.addField(new Field(plugin.getName(), "[>](1) Version : "+plugin.getVersion()+"\n[>](2) Author(s) : "+plugin.getAuthorsToString(), true));
+		}
+		if(builder.getFields().size() == 0) builder.setDescription("Don't use a plugin.");
+		builder.setFooter("Using API NSelfBot v"+NBot.getNBot().getVersion()+" created by NeutronStars", null);
+		builder.setColor(Color.MAGENTA);
+		try{
+			channel.sendMessage(builder.build());
+		}catch (Exception e){
+			channel.sendMessage(e.getMessage());
+		}
+	}
 	
 	/**
 	 * Stop Command.
@@ -120,18 +152,29 @@ public final class DefaultCommand implements CommandManager {
 		else return false;
 		return true;
 	}
-	
-	@Command(name="info",description="Info NBot.",executePrivate=true)
+
+	@Command(name="info",description="Info NSelfBot.")
 	private void info(CommandSender sender, Channel channel){
-		String info = "\nInfo NBot: \n  -Created by NeutronStars"
-				 	 +"\nGuild count: "+NBot.getNBot().getJDA().getGuilds().size()
-				 	 +"\nVersion: "+NBot.getNBot().getVersion();
 		if(sender.isConsoleEntity())
 			sender.getConsoleEntity().sendMessage("\n========================================"
-												 + info
-												 +"\n========================================");
-		else channel.sendMessage("```yml\n"+info+"```");
-		
-			
+					+"\nNSelfBot: \n  -Created by NeutronStars"
+					+"\nVersion: "+ NBot.getNBot().getVersion()
+					+"\nLink:\n  GitHub: https://github.com/NeutronStars/N-SelfBot"
+					+"\n========================================");
+		else{
+			EmbedBuilder builder = new EmbedBuilder();
+			builder.setTitle("N-Bot");
+			builder.addField("Version", NBot.getNBot().getVersion(), true);
+			builder.addField("Guilds", String.valueOf(channel.getJDA().getGuilds().size()), true);
+			builder.addField("GitHub", "[>](1) https://github.com/NeutronStars/N-Bot", true);
+			builder.setFooter("Created by NeutronStars", null);
+			builder.setColor(Color.BLUE);
+
+			try {
+				channel.sendMessage(builder.build());
+			}catch (Exception e){
+				channel.sendMessage(e.getMessage());
+			}
+		}
 	}
 }
