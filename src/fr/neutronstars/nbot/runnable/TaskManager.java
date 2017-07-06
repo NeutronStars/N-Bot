@@ -45,7 +45,11 @@ public final class TaskManager implements Runnable{
 		}
 	}
 	
-	public void runTask(NBotRunnable runnable){
-		runnable.start();
+	public void runTaskTimer(NBotRunnable runnable, long repeat) {
+		runnable.runTaskTimer(repeat);
+	}
+
+	public void runTaskLater(NBotRunnable runnable, long delay) {
+		runnable.runTaskLater(delay);
 	}
 }

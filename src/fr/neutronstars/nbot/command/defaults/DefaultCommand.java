@@ -68,7 +68,7 @@ public final class DefaultCommand implements CommandManager {
 			if(command.getExecutor() == Executor.CONSOLE
 			   || (channel.isTextChannel() && !NBot.getNBot().getServer(channel.getTextChannel().getGuild()).hasPermission(command.getPermission(), (User)user))
 			   || (channel.isPrivateChannel() && !command.canExecutePrivate())) continue;
-			builder.addField(new Field(command.getName(), (command.hasAlias() ? "[>](1) Alias : "+command.getAliasString()+"\n" : "")+"[>](2) Description : "+command.getDescription(), false));
+			builder.addField(new Field(command.getName(), (command.hasAlias() ? "[>](1) Alias : "+command.getAliasString()+"\n" : "")+"[>](2) Description : "+command.getDescription()+(command.onlyGuild() ? "\n[>](3) Guilds : "+command.getGuildList() : "")+(command.onlyTextChannel() ? "\n[>](3) Text Channels : "+command.getTextChannelList() : ""), false));
 		}
 		user.sendMessage(builder.build());
 		if(channel.isTextChannel()) channel.sendMessage(user.getAsMention()+" check your private message.");
@@ -83,7 +83,7 @@ public final class DefaultCommand implements CommandManager {
 	@Command(name="plugins",description="Show the plugins list.",alias={"plgs"},executePrivate = true)
 	private void plugins(CommandSender sender, Channel channel){
 		if(sender.isConsoleEntity()){
-			StringBuilder builder = new StringBuilder("Plugins list :");
+			StringBuilder builder = new StringBuilder("Plugins list :\n|--------------|");
 			for(NBotPlugin plugin : NBot.getNBot().getPluginManager().getPlugins()){
 				builder.append("\n").append(plugin.getName()).append("\n   version : ").append(plugin.getVersion()).append("\n   author(s) : ").append(plugin.getAuthorsToString());
 			}

@@ -26,7 +26,7 @@ import net.dv8tion.jda.core.entities.Guild;
 /**
  * Main Class.
  * @author NeutronStars
- * @version 1.1.2
+ * @version 1.1.3
  * @since 1.0.0
  */
 
@@ -177,10 +177,19 @@ public final class NBot implements Runnable{
 	/**
 	 * Run task
 	 * @param runnable
-	 * @since 1.1.1
+	 * @since 1.1.3
 	 */
-	public void runTask(NBotRunnable runnable){
-		tasks.runTask(runnable);
+	public void runTaskTimer(NBotRunnable runnable, long repeat) {
+		tasks.runTaskTimer(runnable, repeat);
+	}
+
+	/**
+	 * Run task
+	 * @param runnable
+	 * @since 1.1.3
+	 */
+	public void runTaskLater(NBotRunnable runnable, long delay) {
+		tasks.runTaskLater(runnable, delay);
 	}
 	
 	

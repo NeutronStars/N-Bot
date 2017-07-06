@@ -27,7 +27,7 @@ import net.dv8tion.jda.core.entities.Guild;
 
 /**
  * @author NeutronStars
- * @version 1.0.0
+ * @version 1.1.3
  * @since 1.0.0
  */
 public final class CommandMap {
@@ -59,7 +59,7 @@ public final class CommandMap {
 			if(method.isAnnotationPresent(Command.class)){
 				Command command = method.getAnnotation(Command.class);
 				method.setAccessible(true);
-				SimpleCommand simpleCommand = new SimpleCommand(command.name(), command.type(), command.description(), command.permission(), commandManager, command.executePrivate(),command.alias(), method);
+				SimpleCommand simpleCommand = new SimpleCommand(command.name(), command.type(), command.description(), command.permission(), commandManager, command.executePrivate(),command.alias(), method, command.guildId(), command.textChannelId());
 				simpleCommands.add(simpleCommand);
 				commands.put(command.name(), simpleCommand);
 				if(command.alias().length > 0){
@@ -71,10 +71,25 @@ public final class CommandMap {
 	
 	public boolean onCommand(CommandSender sender, String command, Message message){
 		Object[] object = getCommand(command);
-		if(object[0] == null || (sender.isConsoleEntity() && ((SimpleCommand)object[0]).getExecutor() == Executor.USER) || (sender.isUserEntity() && (((SimpleCommand)object[0]).getExecutor() == Executor.CONSOLE || (message.getChannel().isPrivateChannel() && !((SimpleCommand)object[0]).canExecutePrivate())))){
+		if(object[0] == null
+				|| (sender.isConsoleEntity() && ((SimpleCommand)object[0]).getExecutor() == Executor.USER)
+				|| (sender.isUserEntity()
+						&& (((SimpleCommand)object[0]).getExecutor() == Executor.CONSOLE
+								|| (message.getChannel().isPrivateChannel()
+										&& !((SimpleCommand)object[0]).canExecutePrivate()
+								)
+								|| (message.getChannel().isTextChannel()
+										&& ( (((SimpleCommand)object[0]).onlyGuild() && !((SimpleCommand)object[0]).hasGuild(message.getChannel().getTextChannel().getGuild().getId()))
+											|| (((SimpleCommand)object[0]).onlyTextChannel() &&  !((SimpleCommand)object[0]).hasTextChannel(message.getChannel().getId()))
+										)
+								)
+						)
+				)
+		){
 			if(sender.isConsoleEntity()) sender.getConsoleEntity().sendMessage("Command unknow.");
 			return false;
 		}
+
 		try{
 			if((sender.isUserEntity()) && (message.getChannel().isTextChannel()) && !NBot.getNBot().getServer(message.getGuild()).hasPermission(((SimpleCommand)object[0]).getPermission(), (User)sender)){
 				if(message.getGuild().getMember(message.getJDA().getSelfUser()).hasPermission(Permission.MESSAGE_WRITE)) message.getChannel().sendMessage(sender.getUserEntity().getAsMention()+"\n```diff\n-You don't have permission to perform this command.```");

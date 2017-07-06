@@ -11,12 +11,10 @@ import fr.neutronstars.nbot.NBot;
  */
 public abstract class NBotRunnable implements Runnable{
 
-	private final long ticksUpdate;
-	private boolean running, delete;
-	private long ticks;
+	private boolean running, delete, later;
+	private long ticksUpdate, ticks;
 	
-	public NBotRunnable(long ticks){
-		ticksUpdate = ticks;
+	public NBotRunnable(){
 		NBot.getNBot().registerRunnable(this);
 	}
 	
@@ -32,6 +30,7 @@ public abstract class NBotRunnable implements Runnable{
 		if(canUpdate()){
 			ticks = 0;
 			run();
+			if(later) cancel();
 		}
 	}
 	
@@ -39,8 +38,19 @@ public abstract class NBotRunnable implements Runnable{
 		if(isRunning()) ticks++;
 	}
 	
-	public final void start(){
+	public void start(){
 		running = true;
+	}
+
+	public void runTaskTimer(long repeat){
+		ticksUpdate = repeat;
+		start();
+	}
+
+	public void runTaskLater(long delay){
+		ticksUpdate = delay;
+		later = true;
+		start();
 	}
 	
 	public final void stop(){

@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author NeutronStars
- * @version 1.1.0
+ * @version 1.1.3
  * @since 1.0.0
  */
 
@@ -53,12 +53,23 @@ public @interface Command {
 	public String[] alias() default {};
 	
 	/**
-	 * Can send the command in the Private channel 
-	 * @author NeutronStars
+	 * Can send the command in the Private channel
 	 * @since 1.1.0
 	 */
 	public boolean executePrivate() default false;
-	
+
+	/**
+	 * Can send the command in a guild only
+	 * @since 1.1.3
+	 */
+	public long[] guildId() default {};
+
+	/**
+	 * Can send the command in a text channel only
+	 * @since 1.1.3
+	 */
+	public long[] textChannelId() default {};
+
 	/**
 	 * Who can execute command
 	 * @author NeutronStars
