@@ -1,7 +1,8 @@
 package fr.neutronstars.nbot.command.defaults;
 
-import java.awt.Color;
+import java.awt.*;
 
+import java.util.List;
 import fr.neutronstars.nbot.NBot;
 import fr.neutronstars.nbot.command.Command;
 import fr.neutronstars.nbot.command.Command.Executor;
@@ -9,15 +10,16 @@ import fr.neutronstars.nbot.command.Command.Permission;
 import fr.neutronstars.nbot.command.CommandManager;
 import fr.neutronstars.nbot.command.CommandMap;
 import fr.neutronstars.nbot.command.SimpleCommand;
+import fr.neutronstars.nbot.entity.*;
 import fr.neutronstars.nbot.entity.Channel;
-import fr.neutronstars.nbot.entity.CommandSender;
-import fr.neutronstars.nbot.entity.ConsoleEntity;
+import fr.neutronstars.nbot.entity.Message;
 import fr.neutronstars.nbot.entity.User;
-import fr.neutronstars.nbot.entity.UserEntity;
 import fr.neutronstars.nbot.plugin.NBotPlugin;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.entities.MessageEmbed.Field;
+import net.dv8tion.jda.core.entities.impl.GameImpl;
 
 /**
  * Default Command of NBot
@@ -177,5 +179,33 @@ public final class DefaultCommand implements CommandManager {
 				channel.sendMessage(e.getMessage());
 			}
 		}
+	}
+
+	@Command(name = "game",type = Executor.CONSOLE)
+	private void game(CommandSender sender, JDA jda, String command){
+		jda.getPresence().setGame(new GameImpl(command.replaceFirst("game ", ""), null, Game.GameType.DEFAULT));
+		sender.getConsoleEntity().sendMessage("Game modified.");
+	}
+
+	@Command(name="invite",type =Executor.USER,executePrivate = true,description = "Invite this bot in your guild.")
+	private void invite(User user, Channel channel){
+		String url = "https://discordapp.com/oauth2/authorize?client_id=312375900559638528&scope=bot&permissions=2146958583";
+		if(channel.isTextChannel()) channel.sendMessage(user.getAsMention()+" -> "+url);
+		else channel.sendMessage(url);
+	}
+
+	@Command(name = "ban",permission = Permission.ADMINISTRATOR,description = "Ban a user in your guild.")
+	private void ban(Channel channel, Message message, String[] args){
+		if(args.length < 2 || message.getMentionedUsers().size() == 0){
+			channel.sendMessage("&ban <@User> <Raison>");
+			return;
+		}
+		StringBuilder builder = new StringBuilder();
+		for(int i = 1; i < args.length; i++){
+			if(builder.length() > 0) builder.append(" ");
+			builder.append(args[i]);
+		}
+		channel.getTextChannel().getGuild().getController().ban(message.getMentionedUsers().get(0),0, builder.toString()).complete();
+		channel.sendMessage("Thor's hammer to hit !");
 	}
 }

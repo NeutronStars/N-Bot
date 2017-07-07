@@ -7,6 +7,8 @@ import fr.neutronstars.nbot.entity.User;
 import fr.neutronstars.nbot.logger.NBotLogger;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.impl.GameImpl;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -61,6 +63,7 @@ public class BotListener implements EventListener{
 		});
 		builder.append("\n========================================");
 		logger.log(builder.toString());
+		if(NBot.getNBot().getPlay() != null) jda.getPresence().setGame(new GameImpl(NBot.getNBot().getPlay(), null, Game.GameType.DEFAULT));
 	}
 
 }

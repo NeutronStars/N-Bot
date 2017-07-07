@@ -49,7 +49,7 @@ public final class NBot implements Runnable{
 	private final Scanner scanner = new Scanner(System.in);
 	private final Random random = new Random();
 	private final PluginManager pluginManager;
-	private final String version = "1.1.2";
+	private final String play, version = "1.1.3";
 	private final CommandMap commandMap;
 	private final JDA jda;
 	
@@ -61,7 +61,8 @@ public final class NBot implements Runnable{
 	
 	private boolean running;
 	
-	private NBot(String token, String tag) throws Exception{
+	private NBot(String token, String tag, String play) throws Exception{
+		this.play = play;
 		commandMap = new CommandMap(tag);
 		pluginManager = new PluginManager(commandMap);
 		jda = new JDABuilder(AccountType.BOT).setToken(token).buildAsync();
@@ -94,7 +95,16 @@ public final class NBot implements Runnable{
 	public ConsoleEntity getConsoleEntity() {
 		return consoleEntity;
 	}
-	
+
+	/**
+	 * Get default game
+	 * @return play
+	 * @since 1.1.3
+	 */
+	public String getPlay() {
+		return play;
+	}
+
 	/**
 	 * Retrieves the instance of the class PluginManager.
 	 * @return {@link PluginManager}
@@ -226,13 +236,14 @@ public final class NBot implements Runnable{
 				BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 				writer.write("token=Insert your token\n");
 				writer.write("tag=bot.\n");
+				writer.write("play=\n");
 				writer.flush();
 				writer.close();
 				logger.log("Please, complete the file \"info.txt\" in the folder \"config\".");
 				return;
 			}
 			if(args.length < 1){
-				args = new String[2];
+				args = new String[3];
 				BufferedReader reader = new BufferedReader(new FileReader(file));
 				while (reader.ready()){
 					final String line = reader.readLine();
@@ -246,12 +257,13 @@ public final class NBot implements Runnable{
 					switch (option[0]){
 						case "token": args[0] = line.replaceFirst("token=", ""); break;
 						case "tag": args[1] = line.replaceFirst("tag=", ""); break;
+						case "play": args[2] = line.replaceFirst("play=", ""); break;
 					}
 				}
 				reader.close();
 			}
 			
-			nBot = new NBot(args[0], args.length < 2 ? "selfbot." : args[1]);
+			nBot = new NBot(args[0], args.length < 2 ? "bot." : args[1], args.length < 3 ? null : args[2].equalsIgnoreCase("") ? null : args[2]);
 			nBot.pluginManager.loadPlugins();
 		}catch(Exception exception){
 			logger.logThrowable(exception);
